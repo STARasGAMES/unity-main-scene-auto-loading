@@ -1,0 +1,24 @@
+{
+  "name": "com.sag.main-scene-auto-loading",
+  "version": "0.0.1",
+  "displayName": "Main Scene Auto Loading",
+  "description": "Unity package that loads main (boot, master, loader) scene before entering play mode.",
+  "unity": "2019.4",
+  "unityRelease": "8f1",
+  "keywords": [
+    "tool"
+  ],
+  "author": {
+    "name": "STARasGAMES",
+    "email": "",
+    "url": "https://github.com/STARasGAMES"
+  },
+  "samples": [
+    {
+      "displayName": "Sample name",
+      "description": "Sample description.",
+      "path": "Samples~/SampleFolderName"
+    }
+  ],
+  "type": "tool"
+}
