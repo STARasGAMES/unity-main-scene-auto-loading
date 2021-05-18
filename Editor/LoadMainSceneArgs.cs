@@ -10,19 +10,22 @@ namespace SaG.MainSceneAutoLoading
         public readonly GlobalObjectId[] SelectedObjectsInHierarchy;
         public readonly GlobalObjectId[] UnfoldedObjects;
         public readonly List<string> ExpandedScenes;
+        public readonly bool RestoreHierarchyState;
 
         public LoadMainSceneArgs(
             SceneSetup[] sceneSetups,
             GlobalObjectId[] selectedObjectsInHierarchy,
             GlobalObjectId[] unfoldedObjects,
-            List<string> expandedScenes)
+            List<string> expandedScenes,
+            bool restoreHierarchyState)
         {
             SceneSetups = sceneSetups;
             SelectedObjectsInHierarchy = selectedObjectsInHierarchy;
             UnfoldedObjects = unfoldedObjects;
             ExpandedScenes = expandedScenes;
+            RestoreHierarchyState = restoreHierarchyState;
         }
-        
+
         // todo Serialization to save in EditorPrefs
     }
 }
