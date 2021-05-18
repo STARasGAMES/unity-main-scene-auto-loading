@@ -1,7 +1,11 @@
 {
-    "name": "PackageName",
-    "references": [],
-    "includePlatforms": [],
+    "name": "SaG.MainSceneAutoLoading.Editor",
+    "references": [
+        "PackageName"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

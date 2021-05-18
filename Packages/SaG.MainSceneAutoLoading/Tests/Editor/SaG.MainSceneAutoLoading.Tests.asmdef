@@ -1,5 +1,5 @@
 {
-    "name": "PackageName.Tests",
+    "name": "SaG.MainSceneAutoLoading.Tests",
     "references": [
         "PackageName",
         "UnityEditor.TestRunner",
