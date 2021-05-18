@@ -30,6 +30,12 @@ namespace SaG.MainSceneAutoLoading
             EditorGUILayout.PropertyField(
                 _serializedObject.FindProperty(nameof(MainSceneAutoLoadingSettings.MainScene)));
             
+            EditorGUILayout.PropertyField(
+                _serializedObject.FindProperty(nameof(MainSceneAutoLoadingSettings.LoadAllLoadedScenes)));
+            
+            EditorGUILayout.PropertyField(
+                _serializedObject.FindProperty(nameof(MainSceneAutoLoadingSettings.RestoreHierarchyState)));
+            
             _serializedObject.ApplyModifiedProperties();
         }
 
@@ -46,17 +52,12 @@ namespace SaG.MainSceneAutoLoading
                 var provider = new MainSceneAutoLoadingSettingsProvider("Project/Main Scene Auto Loader", SettingsScope.Project);
  
                 // Automatically extract all keywords from the Styles.
-                provider.keywords = GetSearchKeywordsFromGUIContentProperties<Styles>();
+                provider.keywords = GetSearchKeywordsFromSerializedObject(MainSceneAutoLoadingSettings.GetSerializedSettings());
                 return provider;
             }
  
             // Settings Asset doesn't exist yet; no need to display anything in the Settings window.
             return null;
-        }
-        
-        class Styles
-        {
-            public static GUIContent Enabled = new GUIContent("Enabled");
         }
     }
 }

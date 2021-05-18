@@ -14,6 +14,10 @@ namespace SaG.MainSceneAutoLoading.Settings
 
         public SceneAsset MainScene = default;
 
+        public bool LoadAllLoadedScenes = false;
+
+        public bool RestoreHierarchyState = true;
+
         internal IMainSceneProvider GetMainSceneProvider()
         {
             if (MainScene != null)
@@ -26,6 +30,8 @@ namespace SaG.MainSceneAutoLoading.Settings
 
         internal IMainSceneLoadedHandler GetLoadMainSceneHandler()
         {
+            if (LoadAllLoadedScenes)
+                return new LoadAllLoadedScenes();
             return new LoadActiveScene();
         }
 
