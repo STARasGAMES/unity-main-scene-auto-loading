@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace SaG.MainSceneAutoLoading
 {
-    public static class SceneAssetHelper
+    public static class SceneAssetUtility
     {
         public static string ConvertSceneAssetToString(SceneAsset sceneAsset) =>
             AssetDatabase.GetAssetOrScenePath(sceneAsset);

@@ -1,4 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.EditorCoroutines.Editor;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace SaG.MainSceneAutoLoading.MainSceneLoadedHandlers
@@ -9,6 +15,8 @@ namespace SaG.MainSceneAutoLoading.MainSceneLoadedHandlers
         {
             var path = args.SceneSetups.First(scene => scene.isActive).path;
             SceneManager.LoadScene(path);
+            SceneHierarchyStateUtility.RestoreHierarchyState(args);
         }
+        
     }
 }

@@ -12,6 +12,8 @@ namespace SaG.MainSceneAutoLoading.MainSceneLoadedHandlers
             {
                 SceneManager.LoadScene(sceneSetup.path, LoadSceneMode.Additive);
             }
+            
+            SceneHierarchyStateUtility.RestoreHierarchyState(args);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace SaG.MainSceneAutoLoading.PlaymodeExitedHandlers
         public void OnPlaymodeExited(LoadMainSceneArgs args)
         {
             EditorSceneManager.RestoreSceneManagerSetup(args.SceneSetups);
+            SceneHierarchyStateUtility.RestoreHierarchyState(args);
         }
     }
 }

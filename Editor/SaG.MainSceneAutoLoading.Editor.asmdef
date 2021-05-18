@@ -1,7 +1,7 @@
 {
     "name": "SaG.MainSceneAutoLoading.Editor",
     "references": [
-        "PackageName"
+        "Unity.EditorCoroutines.Editor"
     ],
     "includePlatforms": [
         "Editor"
