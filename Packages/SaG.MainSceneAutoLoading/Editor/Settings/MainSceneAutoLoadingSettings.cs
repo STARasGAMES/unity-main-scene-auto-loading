@@ -1,5 +1,6 @@
 ﻿using SaG.MainSceneAutoLoading.MainSceneLoadedHandlers;
 using SaG.MainSceneAutoLoading.MainSceneProviders;
+using SaG.MainSceneAutoLoading.PlaymodeExitedHandlers;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,6 +27,11 @@ namespace SaG.MainSceneAutoLoading.Settings
         internal IMainSceneLoadedHandler GetLoadMainSceneHandler()
         {
             return new LoadActiveScene();
+        }
+
+        internal IPlaymodeExitedHandler GetPlaymodeExitedHandler()
+        {
+            return new RestoreSceneManagerSetup();
         }
 
         internal static MainSceneAutoLoadingSettings GetOrCreate()

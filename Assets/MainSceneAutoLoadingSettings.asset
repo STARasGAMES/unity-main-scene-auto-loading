@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: MainSceneAutoLoadingSettings
   m_EditorClassIdentifier: 
   Enabled: 1
-  MainScene: {fileID: 102900000, guid: 1a1726572ca752346863353a7d9407f8, type: 3}
+  MainScene: {fileID: 102900000, guid: 6b7fc3bb285ad3c43955c452707059d6, type: 3}

@@ -16,7 +16,7 @@ namespace SaG.MainSceneAutoLoading.MainSceneProviders
             }
 
             var path = editorBuildSettingsScene.path;
-            SceneAsset sceneAsset = SceneAssetHelper.ConvertPathToSceneAsset(path);
+            SceneAsset sceneAsset = SceneAssetUtility.ConvertPathToSceneAsset(path);
             return sceneAsset;
         }
     }
