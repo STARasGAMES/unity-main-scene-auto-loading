@@ -15,7 +15,7 @@ namespace SaG.MainSceneAutoLoading.Settings
         public override void OnInspectorGUI()
         {
             float width = GetViewWidth();
-            EditorGUILayout.LabelField($"Width: {width}");
+            //EditorGUILayout.LabelField($"Width: {width}");
             var labelWidth = EditorGUIUtility.labelWidth;
             EditorGUIUtility.labelWidth = 200;//width / 2;
 
