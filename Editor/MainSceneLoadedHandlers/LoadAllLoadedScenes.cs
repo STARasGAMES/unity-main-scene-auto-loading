@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using SaG.MainSceneAutoLoading.Utilities;
 using UnityEngine.SceneManagement;
 
 namespace SaG.MainSceneAutoLoading.MainSceneLoadedHandlers

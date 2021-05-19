@@ -4,7 +4,7 @@ using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEngine;
 
-namespace SaG.MainSceneAutoLoading
+namespace SaG.MainSceneAutoLoading.Utilities
 {
     public static class SceneHierarchyStateUtility
     {
@@ -23,11 +23,13 @@ namespace SaG.MainSceneAutoLoading
             List<GameObject> selection = new List<GameObject>(ids.Length);
             foreach (var id in ids)
             {
-                var obj = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(id) as Transform;
-                if (obj != null)
+                var obj = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(id) as GameObject;
+                if (obj == null)
                 {
-                    selection.Add(obj.gameObject);
+                    Debug.LogError($"Can't select object by GlobalObjectId. Most likely it's a prefab. For now, prefab selection do not persist in playmode.\n{id}");
+                    continue;
                 }
+                selection.Add(obj);
             }
             Selection.objects = selection.ToArray();
             

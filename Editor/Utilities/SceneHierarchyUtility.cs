@@ -1,10 +1,11 @@
 ﻿// Partially from: https://github.com/sandolkakos/unity-utilities/blob/main/Scripts/Editor/SceneHierarchyUtility.cs
+
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace SaG.MainSceneAutoLoading
+namespace SaG.MainSceneAutoLoading.Utilities
 {
     /// <summary>
     /// Editor functionalities from internal SceneHierarchyWindow and SceneHierarchy classes. 

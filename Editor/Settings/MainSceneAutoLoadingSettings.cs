@@ -1,8 +1,13 @@
-﻿using SaG.MainSceneAutoLoading.MainSceneLoadedHandlers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using SaG.MainSceneAutoLoading.MainSceneLoadedHandlers;
 using SaG.MainSceneAutoLoading.MainSceneProviders;
 using SaG.MainSceneAutoLoading.PlaymodeExitedHandlers;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace SaG.MainSceneAutoLoading.Settings
 {
@@ -18,6 +23,10 @@ namespace SaG.MainSceneAutoLoading.Settings
 
         public bool RestoreHierarchyState = true;
 
+        public HandlerSource MainSceneLoadedHandlerSource;
+
+        public Object ExplicitMainSceneLoadedHandler;
+
         internal IMainSceneProvider GetMainSceneProvider()
         {
             if (MainScene != null)
@@ -30,9 +39,20 @@ namespace SaG.MainSceneAutoLoading.Settings
 
         internal IMainSceneLoadedHandler GetLoadMainSceneHandler()
         {
-            if (LoadAllLoadedScenes)
-                return new LoadAllLoadedScenes();
-            return new LoadActiveScene();
+            switch (MainSceneLoadedHandlerSource)
+            {
+                case HandlerSource.Default:
+                    if (LoadAllLoadedScenes)
+                        return new LoadAllLoadedScenes();
+                    return new LoadActiveScene();
+                case HandlerSource.FindObjectsOfType:
+                    var handlers = new List<IMainSceneLoadedHandler>(FindInterfacesOfType<IMainSceneLoadedHandler>());
+                    return new MainSceneLoadedHandlers.Composite(handlers);
+                case HandlerSource.ExplicitObjectReference:
+                    return (IMainSceneLoadedHandler) ExplicitMainSceneLoadedHandler;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(MainSceneLoadedHandlerSource));
+            }
         }
 
         internal IPlaymodeExitedHandler GetPlaymodeExitedHandler()
@@ -54,10 +74,23 @@ namespace SaG.MainSceneAutoLoading.Settings
 
             return settings;
         }
+        
+        private static IEnumerable<T> FindInterfacesOfType<T>(bool includeInactive = false)
+        {
+            return SceneManager.GetActiveScene().GetRootGameObjects()
+                .SelectMany(go => go.GetComponentsInChildren<T>(includeInactive));
+        }
 
         internal static SerializedObject GetSerializedSettings()
         {
             return new SerializedObject(GetOrCreate());
+        }
+
+        public enum HandlerSource
+        {
+            Default,
+            FindObjectsOfType,
+            ExplicitObjectReference
         }
     }
 }

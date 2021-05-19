@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using SaG.MainSceneAutoLoading.Settings;
+using SaG.MainSceneAutoLoading.Utilities;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -67,13 +68,15 @@ namespace SaG.MainSceneAutoLoading
             SetPlayModeStartScene(mainScene);
 
             var loadedScenes = EditorSceneManager.GetSceneManagerSetup();
-            GlobalObjectId[] selected = new GlobalObjectId[Selection.transforms.Length];
-            GlobalObjectId.GetGlobalObjectIdsSlow(Selection.transforms, selected);
-
+            var selectedGameObjects = Selection.gameObjects;
+            GlobalObjectId[] selectedGameObjectsIds = new GlobalObjectId[selectedGameObjects.Length];
+            GlobalObjectId.GetGlobalObjectIdsSlow(selectedGameObjects, selectedGameObjectsIds);
+           
             var unfoldedObjects = SceneHierarchyUtility.GetExpandedGameObjects()
                 .Select(go => GlobalObjectId.GetGlobalObjectIdSlow(go)).ToArray();
             var expandedScenes = SceneHierarchyUtility.GetExpandedSceneNames();
-            CurrentArgs = new LoadMainSceneArgs(loadedScenes, selected, unfoldedObjects, expandedScenes, Settings.RestoreHierarchyState);
+            CurrentArgs = new LoadMainSceneArgs(loadedScenes, selectedGameObjectsIds, unfoldedObjects, expandedScenes,
+                Settings.RestoreHierarchyState);
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

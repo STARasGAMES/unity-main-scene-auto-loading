@@ -1,4 +1,6 @@
-﻿namespace SaG.MainSceneAutoLoading.PlaymodeExitedHandlers
+﻿using SaG.MainSceneAutoLoading.Utilities;
+
+namespace SaG.MainSceneAutoLoading.PlaymodeExitedHandlers
 {
     public class RestoreSceneManagerSetup : IPlaymodeExitedHandler
     {
