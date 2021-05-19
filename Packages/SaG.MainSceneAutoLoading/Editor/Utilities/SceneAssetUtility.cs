@@ -1,7 +1,6 @@
-﻿using System.Security.Permissions;
-using UnityEditor;
+﻿using UnityEditor;
 
-namespace SaG.MainSceneAutoLoading
+namespace SaG.MainSceneAutoLoading.Utilities
 {
     public static class SceneAssetUtility
     {

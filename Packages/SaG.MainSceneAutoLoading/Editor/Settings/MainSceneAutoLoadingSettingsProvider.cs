@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using SaG.MainSceneAutoLoading.Settings;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace SaG.MainSceneAutoLoading
+namespace SaG.MainSceneAutoLoading.Settings
 {
     public class MainSceneAutoLoadingSettingsProvider : SettingsProvider
     {
