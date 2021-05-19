@@ -23,7 +23,7 @@ namespace SaG.MainSceneAutoLoading.Settings
 
         public override void OnGUI(string searchContext)
         {
-            EditorGUILayout.LabelField($"CUSTOM 1 {EditorGUIUtility.labelWidth} {EditorGUIUtility.fieldWidth}");
+            EditorGUILayout.Space();
             _editor.OnInspectorGUI();
         }
 
