@@ -1,4 +1,6 @@
-﻿using SaG.MainSceneAutoLoading.Utilities;
+﻿using SaG.MainSceneAutoLoading.MainSceneLoadedHandlers;
+using SaG.MainSceneAutoLoading.Utilities;
+using UnityEditor;
 
 namespace SaG.MainSceneAutoLoading.PlaymodeExitedHandlers
 {
@@ -9,6 +11,13 @@ namespace SaG.MainSceneAutoLoading.PlaymodeExitedHandlers
             // by not calling this we let Unity restore unsaved changes in the scene
             // EditorSceneManager.RestoreSceneManagerSetup(args.SceneSetups);
             SceneHierarchyStateUtility.RestoreHierarchyState(args);
+        }
+        
+        [CustomPropertyDrawer(typeof(RestoreSceneManagerSetup))]
+        public sealed class Drawer : BasePropertyDrawer
+        {
+            public override string Description =>
+                $"Default. Will try to restore hierarchy state(loaded scenes, selected objects, objects` expanding) that was before entering playmode.";
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using SaG.MainSceneAutoLoading.Utilities;
+using UnityEditor;
 using UnityEngine.SceneManagement;
 
 namespace SaG.MainSceneAutoLoading.MainSceneLoadedHandlers
@@ -15,6 +16,13 @@ namespace SaG.MainSceneAutoLoading.MainSceneLoadedHandlers
             }
             
             SceneHierarchyStateUtility.RestoreHierarchyState(args);
+        }
+        
+        [CustomPropertyDrawer(typeof(LoadAllLoadedScenes))]
+        public sealed class Drawer : BasePropertyDrawer
+        {
+            public override string Description =>
+                $"Loads all scene that was loaded in hierarchy.";
         }
     }
 }

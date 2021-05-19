@@ -17,47 +17,30 @@ namespace SaG.MainSceneAutoLoading.Settings
 
         public bool Enabled = true;
 
-        public SceneAsset MainScene = default;
+        [SerializeReference]
+        internal IMainSceneProvider _mainSceneProvider = new FirstSceneInBuildSettings();
 
-        public bool LoadAllLoadedScenes = false;
+        [SerializeReference]
+        internal IMainSceneLoadedHandler _mainSceneLoadedHandler = new LoadAllLoadedScenes();
+
+        [SerializeReference]
+        internal IPlaymodeExitedHandler _playmodeExitedHandler = new RestoreSceneManagerSetup();
 
         public bool RestoreHierarchyState = true;
 
-        public HandlerSource MainSceneLoadedHandlerSource;
-
-        public Object ExplicitMainSceneLoadedHandler;
-
         internal IMainSceneProvider GetMainSceneProvider()
         {
-            if (MainScene != null)
-            {
-                return new ConcreteMainSceneProvider(MainScene);
-            }
-
-            return new FirstSceneInBuildSettingsMainSceneProvider();
+            return _mainSceneProvider;
         }
 
         internal IMainSceneLoadedHandler GetLoadMainSceneHandler()
         {
-            switch (MainSceneLoadedHandlerSource)
-            {
-                case HandlerSource.Default:
-                    if (LoadAllLoadedScenes)
-                        return new LoadAllLoadedScenes();
-                    return new LoadActiveScene();
-                case HandlerSource.FindObjectsOfType:
-                    var handlers = new List<IMainSceneLoadedHandler>(FindInterfacesOfType<IMainSceneLoadedHandler>());
-                    return new MainSceneLoadedHandlers.Composite(handlers);
-                case HandlerSource.ExplicitObjectReference:
-                    return (IMainSceneLoadedHandler) ExplicitMainSceneLoadedHandler;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(MainSceneLoadedHandlerSource));
-            }
+            return _mainSceneLoadedHandler;
         }
 
         internal IPlaymodeExitedHandler GetPlaymodeExitedHandler()
         {
-            return new RestoreSceneManagerSetup();
+            return _playmodeExitedHandler;
         }
 
         internal static MainSceneAutoLoadingSettings GetOrCreate()
@@ -67,30 +50,19 @@ namespace SaG.MainSceneAutoLoading.Settings
             {
                 settings = ScriptableObject.CreateInstance<MainSceneAutoLoadingSettings>();
                 settings.Enabled = true;
-                settings.MainScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(EditorBuildSettings.scenes[0].path);
+                settings._mainSceneProvider = new FirstSceneInBuildSettings();
+                settings._mainSceneLoadedHandler = new LoadAllLoadedScenes();
+                settings._playmodeExitedHandler = new RestoreSceneManagerSetup();
                 AssetDatabase.CreateAsset(settings, AssetPath);
                 AssetDatabase.SaveAssets();
             }
 
             return settings;
         }
-        
-        private static IEnumerable<T> FindInterfacesOfType<T>(bool includeInactive = false)
-        {
-            return SceneManager.GetActiveScene().GetRootGameObjects()
-                .SelectMany(go => go.GetComponentsInChildren<T>(includeInactive));
-        }
 
         internal static SerializedObject GetSerializedSettings()
         {
             return new SerializedObject(GetOrCreate());
-        }
-
-        public enum HandlerSource
-        {
-            Default,
-            FindObjectsOfType,
-            ExplicitObjectReference
         }
     }
 }
