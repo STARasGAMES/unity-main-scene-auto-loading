@@ -22,7 +22,7 @@ namespace SaG.MainSceneAutoLoading.MainSceneLoadedHandlers
         public sealed class Drawer : BasePropertyDrawer
         {
             public override string Description =>
-                $"Loads all scene that was loaded in hierarchy.";
+                $"Loads all scene that was loaded in hierarchy before entering playmode.";
         }
     }
 }
