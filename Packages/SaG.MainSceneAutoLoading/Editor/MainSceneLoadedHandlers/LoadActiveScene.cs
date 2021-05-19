@@ -1,11 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using SaG.MainSceneAutoLoading.Utilities;
-using Unity.EditorCoroutines.Editor;
 using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace SaG.MainSceneAutoLoading.MainSceneLoadedHandlers
@@ -19,5 +14,11 @@ namespace SaG.MainSceneAutoLoading.MainSceneLoadedHandlers
             SceneHierarchyStateUtility.RestoreHierarchyState(args);
         }
         
+        [CustomPropertyDrawer(typeof(LoadActiveScene))]
+        public sealed class Drawer : BasePropertyDrawer
+        {
+            public override string Description =>
+                $"Loads only one scene that was active in hierarchy(with bold name).";
+        }
     }
 }

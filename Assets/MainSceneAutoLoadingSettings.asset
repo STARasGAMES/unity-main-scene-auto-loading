@@ -13,6 +13,23 @@ MonoBehaviour:
   m_Name: MainSceneAutoLoadingSettings
   m_EditorClassIdentifier: 
   Enabled: 1
-  MainScene: {fileID: 102900000, guid: 6b7fc3bb285ad3c43955c452707059d6, type: 3}
-  LoadAllLoadedScenes: 1
+  _mainSceneProvider:
+    id: 0
+  _mainSceneLoadedHandler:
+    id: 1
+  _playmodeExitedHandler:
+    id: 2
   RestoreHierarchyState: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: ConcreteMainSceneProvider, ns: SaG.MainSceneAutoLoading.MainSceneProviders,
+        asm: SaG.MainSceneAutoLoading.Editor}
+      data:
+        _sceneAsset: {fileID: 0}
+    00000001:
+      type: {class: DelegateToInSceneImplementations, ns: SaG.MainSceneAutoLoading.MainSceneLoadedHandlers,
+        asm: SaG.MainSceneAutoLoading.Editor}
+    00000002:
+      type: {class: RestoreSceneManagerSetup, ns: SaG.MainSceneAutoLoading.PlaymodeExitedHandlers,
+        asm: SaG.MainSceneAutoLoading.Editor}
