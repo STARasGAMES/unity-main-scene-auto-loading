@@ -18,7 +18,7 @@ namespace SaG.MainSceneAutoLoading.MainSceneLoadedHandlers
         public sealed class Drawer : BasePropertyDrawer
         {
             public override string Description =>
-                $"Loads only one scene that was active in hierarchy(with bold name).";
+                $"Loads only one scene that was active(with bold name) in hierarchy before entering playmode.";
         }
     }
 }
