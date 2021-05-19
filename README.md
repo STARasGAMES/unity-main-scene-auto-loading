@@ -7,6 +7,7 @@ For more details why you need this and how to implement it: https://forum.unity.
 
 Known issues:
  + Hierarchy state and selections are lost on domain reload (when exiting playmode after script compilation)
+ + Prefab selection missed after scene load
 
 ## Installation
 Install via git url by adding this entry in your **manifest.json**
