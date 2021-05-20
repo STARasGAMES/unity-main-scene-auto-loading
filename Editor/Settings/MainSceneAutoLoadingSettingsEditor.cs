@@ -52,7 +52,8 @@ namespace SaG.MainSceneAutoLoading.Settings
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel(new GUIContent(serializedProperty.displayName));
-            var typeName = serializedProperty.managedReferenceFullTypename.Split('.').Last();
+            // Debug.Log(serializedProperty.managedReferenceFullTypename);
+            var typeName = serializedProperty.managedReferenceFullTypename.Split('.', ' ').Last();
             typeName = ObjectNames.NicifyVariableName(typeName);
             if (EditorGUILayout.DropdownButton(new GUIContent(typeName), FocusType.Keyboard, GUILayout.MinWidth(10)))
             {
