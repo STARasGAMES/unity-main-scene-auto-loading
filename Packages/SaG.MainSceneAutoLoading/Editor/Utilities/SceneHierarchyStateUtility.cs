@@ -17,6 +17,7 @@ namespace SaG.MainSceneAutoLoading.Utilities
         {
             yield return null;
             
+            // todo: check if at least one scene was loaded
             SceneHierarchyUtility.SetScenesExpanded(args.ExpandedScenes);
             
             var ids = args.SelectedObjectsInHierarchy;
@@ -24,6 +25,7 @@ namespace SaG.MainSceneAutoLoading.Utilities
             foreach (var id in ids)
             {
                 var obj = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(id) as GameObject;
+                // todo: check asset id to identify prefab
                 if (obj == null)
                 {
                     Debug.LogError($"Can't select object by GlobalObjectId. Most likely it's a prefab. For now, prefab selection do not persist in playmode.\n{id}");
