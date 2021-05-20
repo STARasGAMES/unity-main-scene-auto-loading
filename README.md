@@ -138,6 +138,7 @@ The same as above, just implement this interface and you are good to go.
 
 However, you could also create an in-scnene handler and combine with DelegateToInSceneImplementations option.
 ```c#
+#if UNITY_EDITOR // this script should not be present in builds
 using System.Collections;
 using SaG.MainSceneAutoLoading;
 using SaG.MainSceneAutoLoading.MainSceneLoadedHandlers;
@@ -165,6 +166,7 @@ public class InSceneMainSceneLoadedHandler : MonoBehaviour, IMainSceneLoadedHand
         SceneHierarchyStateUtility.RestoreHierarchyState(args);
     }
 }
+#endif
 ```
 
 ### IPlaymodeExitedHandler
