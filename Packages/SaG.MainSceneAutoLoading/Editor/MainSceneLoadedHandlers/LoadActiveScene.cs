@@ -11,7 +11,7 @@ namespace SaG.MainSceneAutoLoading.MainSceneLoadedHandlers
         {
             var path = args.SceneSetups.First(scene => scene.isActive).path;
             SceneManager.LoadScene(path);
-            SceneHierarchyStateUtility.RestoreHierarchyState(args);
+            SceneHierarchyStateUtility.StartRestoreHierarchyStateCoroutine(args);
         }
         
         [CustomPropertyDrawer(typeof(LoadActiveScene))]

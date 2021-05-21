@@ -1,48 +1,121 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SaG.MainSceneAutoLoading.Utilities
 {
     public static class SceneHierarchyStateUtility
     {
-        public static EditorCoroutine RestoreHierarchyState(LoadMainSceneArgs args)
+        /// <summary>
+        /// Starts EditorCoroutine that will restore previously selected and expanded GameObjects in the hierarchy.
+        /// Waits for scenes to load first.
+        /// </summary>
+        public static EditorCoroutine StartRestoreHierarchyStateCoroutine(LoadMainSceneArgs args)
         {
-            return EditorCoroutineUtility.StartCoroutineOwnerless(RestoreHierarchyStateEnumerator(args));
+            var playmodeState = Application.isPlaying;
+            return EditorCoroutineUtility.StartCoroutineOwnerless(RestoreHierarchyStateEnumerator(args, playmodeState));
         }
 
-        public static IEnumerator RestoreHierarchyStateEnumerator(LoadMainSceneArgs args)
+        private static IEnumerator RestoreHierarchyStateEnumerator(LoadMainSceneArgs args, bool playmodeState)
         {
+            while (!IsAnySceneLoaded(args.SceneSetups))
+            {
+                yield return null;
+                if (Application.isPlaying != playmodeState)
+                {
+                    Debug.Log("Playmode state was changed, stopped hierarchy state restore.");
+                    yield break;
+                }
+            }
+
             yield return null;
-            
-            // todo: check if at least one scene was loaded
+
+            RestoreHierarchyStateImmediate(args);
+        }
+
+        private static bool IsAnySceneLoaded(SceneSetup[] sceneSetups)
+        {
+            return sceneSetups
+                .Any(s => SceneManager.GetSceneByPath(s.path).isLoaded);
+        }
+
+        /// <summary>
+        /// Immediately tries to restore previously selected and expanded GameObjects. If no scene was loaded will log error and return.
+        /// </summary>
+        /// <param name="args">LoadMainSceneArgs</param>
+        public static void RestoreHierarchyStateImmediate(LoadMainSceneArgs args)
+        {
+            if (!IsAnySceneLoaded(args.SceneSetups))
+            {
+                Debug.LogError(
+                    "Cannot restore hierarchy state because no scene was loaded when this method was called.");
+                return;
+            }
+
             SceneHierarchyUtility.SetScenesExpanded(args.ExpandedScenes);
-            
+
             var ids = args.SelectedObjectsInHierarchy;
             List<GameObject> selection = new List<GameObject>(ids.Length);
-            foreach (var id in ids)
+            bool isMissingObjects = false;
+            for (var i = 0; i < ids.Length; i++)
             {
+                var id = ids[i];
+                var isPrefab = id.targetPrefabId != 0;
+                if (isPrefab && Application.isPlaying)
+                {
+                    id = ConvertPrefabGidToUnpackedGid(id);
+                }
+
                 var obj = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(id) as GameObject;
-                // todo: check asset id to identify prefab
                 if (obj == null)
                 {
-                    Debug.LogError($"Can't select object by GlobalObjectId. Most likely it's a prefab. For now, prefab selection do not persist in playmode.\n{id}");
+                    isMissingObjects = true;
                     continue;
                 }
+
                 selection.Add(obj);
             }
+
             Selection.objects = selection.ToArray();
-            
-            foreach (var id in args.UnfoldedObjects)
+
+            for (var i = 0; i < args.UnfoldedObjects.Length; i++)
             {
+                var id = args.UnfoldedObjects[i];
+                var isPrefab = id.targetPrefabId != 0;
+                if (isPrefab && Application.isPlaying)
+                {
+                    id = ConvertPrefabGidToUnpackedGid(id);
+                }
+
                 var obj = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(id);
                 if (obj == null || !(obj is GameObject))
+                {
+                    isMissingObjects = true;
                     continue;
+                }
+
                 SceneHierarchyUtility.SetExpanded(obj as GameObject, true);
             }
-            
+
+            if (isMissingObjects)
+            {
+                Debug.LogError("Some selected or expanded objects are missing. Most likely they are destroyed during Awake.");
+            }
+        }
+
+        // how could I know this by myself... https://uninomicon.com/globalobjectid
+        private static GlobalObjectId ConvertPrefabGidToUnpackedGid(GlobalObjectId id)
+        {
+            ulong fileId = (id.targetObjectId ^ id.targetPrefabId) & 0x7fffffffffffffff;
+            bool success = GlobalObjectId.TryParse(
+                $"GlobalObjectId_V1-{id.identifierType}-{id.assetGUID}-{fileId}-0",
+                out GlobalObjectId unpackedGid);
+            return unpackedGid;
         }
     }
 }

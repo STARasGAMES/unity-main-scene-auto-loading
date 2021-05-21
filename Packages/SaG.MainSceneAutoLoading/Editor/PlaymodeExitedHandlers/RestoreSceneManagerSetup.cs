@@ -10,7 +10,7 @@ namespace SaG.MainSceneAutoLoading.PlaymodeExitedHandlers
         {
             // by not calling this we let Unity restore unsaved changes in the scene
             // EditorSceneManager.RestoreSceneManagerSetup(args.SceneSetups);
-            SceneHierarchyStateUtility.RestoreHierarchyState(args);
+            SceneHierarchyStateUtility.StartRestoreHierarchyStateCoroutine(args);
         }
         
         [CustomPropertyDrawer(typeof(RestoreSceneManagerSetup))]
