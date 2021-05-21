@@ -23,7 +23,7 @@ public class InSceneMainSceneLoadedHandler : MonoBehaviour, IMainSceneLoadedHand
         }
 
         // call this to restore previously selected and expanded GameObjects 
-        SceneHierarchyStateUtility.RestoreHierarchyState(args);
+        SceneHierarchyStateUtility.StartRestoreHierarchyStateCoroutine(args);
     }
 }
 #endif
