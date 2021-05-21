@@ -25,8 +25,6 @@ namespace SaG.MainSceneAutoLoading
             ExpandedScenes = expandedScenes;
         }
 
-        // todo Serialization to save in EditorPrefs
-
         [System.Serializable]
         private class SaveData
         {
