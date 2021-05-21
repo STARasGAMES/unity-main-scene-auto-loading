@@ -26,8 +26,6 @@ namespace SaG.MainSceneAutoLoading.Settings
         [SerializeReference]
         internal IPlaymodeExitedHandler _playmodeExitedHandler = new RestoreSceneManagerSetup();
 
-        public bool RestoreHierarchyState = true;
-
         internal IMainSceneProvider GetMainSceneProvider()
         {
             return _mainSceneProvider;
