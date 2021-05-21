@@ -13,6 +13,8 @@
     "url": "https://github.com/STARasGAMES"
   },
   "type": "tool",
+  "documentationUrl": "https://github.com/STARasGAMES/unity-main-scene-auto-loading",
+  "licensesUrl": "https://github.com/STARasGAMES/unity-main-scene-auto-loading/blob/main/LICENSE",
   "dependencies": {
     "com.unity.editorcoroutines": "1.0.0"
   }
