@@ -59,7 +59,7 @@ namespace SaG.MainSceneAutoLoading.Utilities
 
             SceneHierarchyUtility.SetScenesExpanded(args.ExpandedScenes);
 
-            var ids = args.SelectedObjectsInHierarchy;
+            var ids = args.SelectedInHierarchyObjects;
             List<GameObject> selection = new List<GameObject>(ids.Length);
             bool isMissingObjects = false;
             for (var i = 0; i < ids.Length; i++)
@@ -83,9 +83,9 @@ namespace SaG.MainSceneAutoLoading.Utilities
 
             Selection.objects = selection.ToArray();
 
-            for (var i = 0; i < args.UnfoldedObjects.Length; i++)
+            for (var i = 0; i < args.ExpandedInHierarchyObjects.Length; i++)
             {
-                var id = args.UnfoldedObjects[i];
+                var id = args.ExpandedInHierarchyObjects[i];
                 var isPrefab = id.targetPrefabId != 0;
                 if (isPrefab && Application.isPlaying)
                 {

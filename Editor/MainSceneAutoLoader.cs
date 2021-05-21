@@ -10,7 +10,33 @@ namespace SaG.MainSceneAutoLoading
 {
     public static class MainSceneAutoLoader
     {
-        public static LoadMainSceneArgs CurrentArgs { get; private set; }
+        private static string Key => $"{Application.productName}.LoadMainSceneArgs";
+        private static LoadMainSceneArgs _currentArgs;
+
+        public static LoadMainSceneArgs CurrentArgs
+        {
+            get
+            {
+                if (_currentArgs == null && EditorPrefs.HasKey(Key))
+                {
+                    string json = EditorPrefs.GetString(Key);
+                    _currentArgs = LoadMainSceneArgs.Deserialize(json);
+                }
+
+                return _currentArgs;
+            }
+            private set
+            {
+                _currentArgs = value;
+                if (_currentArgs == null)
+                {
+                    EditorPrefs.DeleteKey(Key);
+                    return;
+                }
+
+                EditorPrefs.SetString(Key, value.Serialize());
+            }
+        }
 
         public static MainSceneAutoLoadingSettings Settings => MainSceneAutoLoadingSettings.GetOrCreate();
 
@@ -71,12 +97,12 @@ namespace SaG.MainSceneAutoLoading
             var selectedGameObjects = Selection.gameObjects;
             GlobalObjectId[] selectedGameObjectsIds = new GlobalObjectId[selectedGameObjects.Length];
             GlobalObjectId.GetGlobalObjectIdsSlow(selectedGameObjects, selectedGameObjectsIds);
-           
-            var unfoldedObjects = SceneHierarchyUtility.GetExpandedGameObjects()
+
+            var expandedInHierarchyObjects = SceneHierarchyUtility.GetExpandedGameObjects()
                 .Select(go => GlobalObjectId.GetGlobalObjectIdSlow(go)).ToArray();
             var expandedScenes = SceneHierarchyUtility.GetExpandedSceneNames();
-            CurrentArgs = new LoadMainSceneArgs(loadedScenes, selectedGameObjectsIds, unfoldedObjects, expandedScenes,
-                Settings.RestoreHierarchyState);
+            CurrentArgs = new LoadMainSceneArgs(loadedScenes, selectedGameObjectsIds, expandedInHierarchyObjects,
+                expandedScenes);
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -92,6 +118,7 @@ namespace SaG.MainSceneAutoLoading
         {
             if (CurrentArgs != null)
                 Settings.GetPlaymodeExitedHandler().OnPlaymodeExited(CurrentArgs);
+            CurrentArgs = null;
         }
 
         /// <summary>
