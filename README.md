@@ -25,9 +25,6 @@ Dependencies:
  + Unity 2019.4+ (uses SerializeReference attribute, [docs](https://docs.unity3d.com/2019.3/Documentation/ScriptReference/SerializeReference.html))
  + EditorCoroutines package, [docs](https://docs.unity3d.com/Packages/com.unity.editorcoroutines@1.0/manual/index.html)
 
-Known issues:
- + Hierarchy state and selections are lost on domain reload (when exiting playmode after script compilation)
- + Prefab selection missed after scene load
 
 ## Installation
 Install via git url by adding this entry in your **manifest.json**
