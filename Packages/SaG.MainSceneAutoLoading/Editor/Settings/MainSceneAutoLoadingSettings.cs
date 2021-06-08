@@ -11,9 +11,9 @@ using Object = UnityEngine.Object;
 
 namespace SaG.MainSceneAutoLoading.Settings
 {
-    public class MainSceneAutoLoadingSettings : ScriptableObject
+    public sealed class MainSceneAutoLoadingSettings : ScriptableObject
     {
-        public const string AssetPath = "Assets/MainSceneAutoLoadingSettings.asset";
+        public const string DefaultAssetPath = "Assets/MainSceneAutoLoadingSettings.asset";
 
         public bool Enabled = true;
 
@@ -43,17 +43,18 @@ namespace SaG.MainSceneAutoLoading.Settings
 
         internal static MainSceneAutoLoadingSettings GetOrCreate()
         {
-            var settings = AssetDatabase.LoadAssetAtPath<MainSceneAutoLoadingSettings>(AssetPath);
-            if (settings == null)
+            if (TryLoadAsset(out var settings))
             {
-                settings = ScriptableObject.CreateInstance<MainSceneAutoLoadingSettings>();
-                settings.Enabled = true;
-                settings._mainSceneProvider = new FirstSceneInBuildSettings();
-                settings._mainSceneLoadedHandler = new LoadAllLoadedScenes();
-                settings._playmodeExitedHandler = new RestoreSceneManagerSetup();
-                AssetDatabase.CreateAsset(settings, AssetPath);
-                AssetDatabase.SaveAssets();
+                return settings;
             }
+
+            settings = ScriptableObject.CreateInstance<MainSceneAutoLoadingSettings>();
+            settings.Enabled = true;
+            settings._mainSceneProvider = new FirstSceneInBuildSettings();
+            settings._mainSceneLoadedHandler = new LoadAllLoadedScenes();
+            settings._playmodeExitedHandler = new RestoreSceneManagerSetup();
+            AssetDatabase.CreateAsset(settings, DefaultAssetPath);
+            AssetDatabase.SaveAssets();
 
             return settings;
         }
@@ -61,6 +62,22 @@ namespace SaG.MainSceneAutoLoading.Settings
         internal static SerializedObject GetSerializedSettings()
         {
             return new SerializedObject(GetOrCreate());
+        }
+
+        internal static bool TryLoadAsset(out MainSceneAutoLoadingSettings settings)
+        {
+            // try to find at the default path
+            settings = AssetDatabase.LoadAssetAtPath<MainSceneAutoLoadingSettings>(DefaultAssetPath);
+            if (settings != null)
+                return true;
+
+            // if no asset at default path try to find it in project's assets
+            var assetGuid = AssetDatabase.FindAssets($"t:{typeof(MainSceneAutoLoadingSettings)}").FirstOrDefault();
+            if (string.IsNullOrEmpty(assetGuid))
+                return false;
+            var path = AssetDatabase.GUIDToAssetPath(assetGuid);
+            settings = AssetDatabase.LoadAssetAtPath<MainSceneAutoLoadingSettings>(path);
+            return settings != null;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace SaG.MainSceneAutoLoading.Settings
 
         public static bool IsSettingsAvailable()
         {
-            return File.Exists(MainSceneAutoLoadingSettings.AssetPath);
+            return MainSceneAutoLoadingSettings.TryLoadAsset(out var _);
         }
 
         [SettingsProvider]
