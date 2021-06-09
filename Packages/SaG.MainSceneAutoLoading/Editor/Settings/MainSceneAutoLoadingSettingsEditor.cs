@@ -14,11 +14,10 @@ namespace SaG.MainSceneAutoLoading.Settings
     {
         public override void OnInspectorGUI()
         {
-            float width = GetViewWidth();
-            //EditorGUILayout.LabelField($"Width: {width}");
+            serializedObject.Update();
+            
             var labelWidth = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = 200;//width / 2;
-
+            EditorGUIUtility.labelWidth = 200;
 
             EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(MainSceneAutoLoadingSettings.Enabled)));
 
@@ -32,27 +31,13 @@ namespace SaG.MainSceneAutoLoading.Settings
                 typeof(IPlaymodeExitedHandler));
 
             EditorGUIUtility.labelWidth = labelWidth;
-        }
-
-        private Rect _rect;
-
-        private float GetViewWidth()
-        {
-            GUILayout.Label("hack", GUILayout.MaxHeight(0));
-            if (Event.current.type == EventType.Repaint)
-            {
-                // hack to get real view width
-                _rect = GUILayoutUtility.GetLastRect();
-            }
-
-            return _rect.width;
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawRealization(SerializedProperty serializedProperty, Type addType)
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel(new GUIContent(serializedProperty.displayName));
-            // Debug.Log(serializedProperty.managedReferenceFullTypename);
             var typeName = serializedProperty.managedReferenceFullTypename.Split('.', ' ').Last();
             typeName = ObjectNames.NicifyVariableName(typeName);
             if (EditorGUILayout.DropdownButton(new GUIContent(typeName), FocusType.Keyboard, GUILayout.MinWidth(10)))
@@ -69,9 +54,6 @@ namespace SaG.MainSceneAutoLoading.Settings
                     
                     if (type.IsSubclassOf(typeof(Object)))
                         continue;
-
-                    // if (RequiredAttribute != null && !Attribute.IsDefined(type, RequiredAttribute))
-                    //     continue;
 
                     menu.AddItem(new GUIContent(ObjectNames.NicifyVariableName(type.Name)), false, () =>
                     {
