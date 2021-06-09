@@ -42,7 +42,7 @@ namespace SaG.MainSceneAutoLoading.MainSceneProviders
             var firstScene = EditorBuildSettings.scenes.FirstOrDefault(s => s.enabled);
             if (firstScene != null)
             {
-                sceneLabel = new GUIContent("Scene that will be used as main scene");
+                sceneLabel = new GUIContent("Scene that will be used as main scene", "Scene that will be used as main scene");
                 mainSceneAsset = SceneAssetUtility.ConvertPathToSceneAsset(firstScene.path);
             }
 
