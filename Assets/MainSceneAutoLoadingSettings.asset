@@ -19,7 +19,6 @@ MonoBehaviour:
     id: 1
   _playmodeExitedHandler:
     id: 2
-  RestoreHierarchyState: 1
   references:
     version: 1
     00000000:
