@@ -43,6 +43,8 @@ namespace SaG.MainSceneAutoLoading
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
+            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+
             if (!Settings.Enabled)
             {
                 SetPlayModeStartScene(null);
@@ -51,7 +53,6 @@ namespace SaG.MainSceneAutoLoading
 
             var scene = Settings.GetMainSceneProvider().Get();
             SetPlayModeStartScene(scene);
-            EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }
 
         private static void OnPlayModeStateChanged(PlayModeStateChange state)
@@ -78,6 +79,7 @@ namespace SaG.MainSceneAutoLoading
             CurrentArgs = null;
             if (!Settings.Enabled)
             {
+                Debug.Log("OnEnteringPlayMode SetPlayModeStartScene");
                 SetPlayModeStartScene(null);
                 return;
             }
